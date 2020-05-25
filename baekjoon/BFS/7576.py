@@ -24,17 +24,16 @@
 여러분은 토마토가 모두 익을 때까지의 최소 날짜를 출력해야 한다.
 만약, 저장될 때부터 모든 토마토가 익어있는 상태이면 0을 출력해야 하고, 토마토가 모두 익지는 못하는 상황이면 -1을 출력해야 한다.
 '''
-
+from collections import deque
 def bfs(box, N, M, startPoint, cnt):
-    q = startPoint
+    q = q = deque(startPoint)
     dx = [0, 0, 1, -1]
     dy = [1, -1, 0, 0]
 
-    if cnt == 0:
-        return 0
-
     while q:
-        x, y = q.pop(0)
+        tmp = q.popleft()
+        x = tmp[0]
+        y = tmp[1]
         for i in range(4):
             if x + dx[i] >= 0 and x + dx[i] < M and y + dy[i] >= 0 and y + dy[i] < N:
                 if box[x + dx[i]][y + dy[i]] == 0:
@@ -49,7 +48,7 @@ N, M = input().split()
 N = int(N)
 M = int(M)
 startPoint = []
-cnt = 0
+unripe = 0
 box = []
 
 for i in range(M):
@@ -60,7 +59,10 @@ for i in range(M):
         if box[i][j] == 1:
             startPoint.append((i, j))
         elif box[i][j] == 0:
-            cnt += 1
+            unripe += 1
 
-print(bfs(box, N, M, startPoint, cnt))
+if unripe == 0:
+    print(0)
+else:
+    print(bfs(box, N, M, startPoint, unripe))
 
